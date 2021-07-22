@@ -1,24 +1,30 @@
-import javax.swing.*;
-import java.awt.*;
-import javax.sql.*;
+import java.sql.*;
 
 public class NSurvival {
     public static void main(String[] args) {
-        NSurvival game = new NSurvival();
-        game.showStartScreen();
+        DB dinoBase = new DB("owned_dinosaurs", true);
     }
+}
 
-    public void showStartScreen() {
-        JFrame frame = new JFrame();
-        //widgets
-        JButton start = new JButton("Play");
+class DB {
+    private String url = "jdbc:mysql://localhost:3306/nsurvival";
+    private Connection conn = null;
+    private Statement stmt = null;
+    private ResultSet res = null;
+    private String query = null;
+    private String schema = null;
 
-        //pack all widgets
-        frame.getContentPane().add(start);
-
-        //show window
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300,300);
-        frame.setVisible(true);
+    public DB(String schemaName, Boolean feedback) {
+        schema = schemaName;
+        try {
+            conn = DriverManager.getConnection(url, "RoyalFire", "#SQLPass12345");
+            stmt = conn.createStatement();
+            if (feedback = true) {
+                System.out.println("Connection successful");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+            System.out.println("YOUR DATABASE IS NOT REACHABLE USING TH FOLLOWING URL:" + url);
+        }
     }
 }
